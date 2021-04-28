@@ -1,9 +1,14 @@
 {
+  "private": false,
   "name": "@wheatjs/windi-convert",
   "author": {
     "name": "wheatjs"
   },
-  "version": "1.0.0",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/wheatjs/windi-converter"
+  },
+  "version": "0.0.1",
   "main": "./dist/index.js",
   "bin": {
     "windi-convert": "./dist/index.js"
