@@ -3,7 +3,7 @@ export const regexHtmlTag = /<(\w[\w-]*)[\S\s]*?\/?>/mg
 export const regexClassSplitter = /[\s'"`{}]/g
 export const regexClassGroup = /([!\w+-<@][\w+:_/-]*?\w):\(([!\w\s:/\\,%#\[\].$-]*?)\)/gm
 
-export const regexHTMLClass = /class=["|'][^"|^']*["|']/gm
+export const regexHTMLClass = /[^:|v-]class=["|'][^"|^']*["|']/gm
 
 export const regexClassCheck1 = /^[!a-z\d@<>.+-](?:\([\w,.%#-]*\)|[\w:/\\,%#\[\].$-])*$/
 export const regexClassCheck2 = /[a-z].*[\w)\]]$/

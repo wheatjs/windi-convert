@@ -17,15 +17,15 @@ function normalizeClass(input: string) {
   return input
 }
 
-function convertAttributesToString(attributes): string {
-  let output = ''
+function convertAttributesToString(attributes, prefix): string {
+  let output = ' '
 
   for (const attr in attributes) {
     if (attributes[attr].length > 0)
-      output += `${attr}="${attributes[attr].join(' ')}" `
+      output += `${prefix && attr !== 'class' ? prefix + '-' : ''}${attr}="${attributes[attr].join(' ')}" `
   }
 
-  return output.trim()
+  return output.trimEnd()
 }
 
 function findGroupForClass(input: string) {
@@ -56,24 +56,39 @@ async function init() {
   console.log('🍃 WindiCSS Attributify Converter 🍃')
   console.warn('⚠️ Please backup your code before running this tool ⚠️')
 
-  const { style } = await prompt<{ style: string }>({
+  const { style, prefix, dir } = await prompt<{ style: string, prefix: string, dir: string }>([{
     type: 'select',
     name: 'style',
     message: 'Choose Attributify Style',
     choices: [
       { name: 'utilities', message: 'utilities', value: 'utilities' },
       { name: 'variants', message: 'variants', value: 'variants' },
-    ]
-  })
+    ],
 
-  const files = await fg(path.join(cwd, '/**/*.{vue,html,svelte}'))
+  }, {
+    type: 'input',
+    name: 'prefix',
+    message: 'Attribute Prefix',
+    initial: '',
+  }, {
+    type: 'input',
+    name: 'dir',
+    message: 'Directory (relative)',
+    initial: './src'
+  }])
+
+  const files = await fg(path.join(`${dir ? dir : '.'}`, `/**/*.{vue,html,svelte}`), {
+    onlyFiles: true,
+    ignore: ['node_modules'],
+    cwd,
+  })
   const utils = createUtils()
   await utils.init()
 
   if (style === 'variants') {
     console.log('Sorry this option is not supported yet.')
   } else {
-    files.forEach(async (file) => {
+    await Promise.all(files.map(async (file) => {
       const code = await fs.readFile(file, 'utf-8')
       const ast = await Promise.all(Array.from(code.matchAll(regexHTMLClass))
         .map(async (match) => ({
@@ -113,13 +128,13 @@ async function init() {
             replacement: convertAttributesToString({
               ...node.attributes,
               class: node.classes.filter((x) => node.replaced.indexOf(x) === -1)
-            })
+            }, prefix)
           }
         })
 
       await fs.writeFile(file, replaceAtIndexes(code, nodes))
       console.log(`Update ${file}`)
-    })
+    }))
   }
 
   console.log('Done!')

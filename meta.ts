@@ -50,13 +50,13 @@ export default {
       /^(-)?(inset|top|bottom|left|right|float|clear)(-)?([a-z0-9-/[\]]+)$/gm
     ],
     list: [
-      /^(-)?(list)(-)?([a-z0-9-/[\]]+)$/gm
+      /^(-)?(list)(-)([a-z0-9-/[\]]+)$/gm
     ],
     bg: [
-      /^(-)?(bg)(-)?([a-z0-9-/[\]]+)$/gm
+      /^(-)?(bg)(-)([a-z0-9-/[\]]+)$/gm
     ],
     gradient: [
-      /^(-)?(from|to|via)(-)?([a-z0-9-/[\]]+)$/gm
+      /^(-)?(from|to|via)(-)([a-z0-9-/[\]]+)$/gm
     ],
     border: [
       /^border(?!collapse|seperate)([a-z0-9-[\]]+)?$/gm,
@@ -99,6 +99,7 @@ export default {
       /^(-)?(max-h)(-)?([a-z0-9-/[\]]+)$/gm
     ],
     flex: [
+      'flex',
       /^(-)?(flex)(-)?([a-z0-9-/[\]]+)$/gm,
     ],
     grid: [
