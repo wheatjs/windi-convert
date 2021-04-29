@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import fs from 'fs/promises'
 import fg from 'fast-glob'
 import path from 'path'
@@ -64,7 +66,7 @@ async function init() {
     ]
   })
 
-  const files = await fg(path.join(cwd, '/**/*.vue'))
+  const files = await fg(path.join(cwd, '/**/*.{vue,html,svelte}'))
   const utils = createUtils()
   await utils.init()
 
@@ -91,7 +93,7 @@ async function init() {
             let name = clazz
 
             if (name === group)
-              name = '~'
+              name = 'default'
             else
               name = clazz.replace(new RegExp(group + '(-)?', 'gm'), '')
 
